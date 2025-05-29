@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hydrocarbon Rocket or Snake</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-image: url(https://i.imgur.com/tycFNhz.png);
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+            background-color: #0a192f;
+        }
+        
+        /* Container styling */
+        .content-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: rgba(248, 249, 250, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(41, 128, 185, 0.5);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .content-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.1) 0%, rgba(142, 68, 173, 0.1) 100%);
+            pointer-events: none;
+        }
+        
+        .content-container h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        /* Concept page specific styling */
+        #conceptPage {
+            display: block;
+        }
+        
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .concept-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 4px solid #3498db;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .concept-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        .concept-card h3 {
+            color: #2c3e50;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .concept-card h3 i {
+            font-size: 1.5rem;
+        }
+        
+        .concept-icon {
+            font-size: 2.5rem;
+            color: #3498db;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .formula {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(to right, #e8f4f8, #d1e7f5);
+            padding: 0.7rem;
+            border-radius: 8px;
+            margin: 0.8rem 0;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .example {
+            font-style: italic;
+            color: #2e7d32;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            padding: 0.5rem;
+            background-color: #f1f8e9;
+            border-radius: 5px;
+        }
+        
+        .functional-group {
+            background-color: #fff8e1;
+            padding: 0.8rem;
+            border-radius: 8px;
+            margin: 0.8rem 0;
+            border-left: 4px solid #ffc107;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .functional-group:hover {
+            transform: translateX(5px);
+        }
+        
+        .functional-group .name {
+            font-weight: bold;
+            color: #d84315;
+            font-size: 1.1rem;
+        }
+        
+        .functional-group .formula {
+            display: inline-block;
+            background-color: #ffecb3;
+            padding: 0.3rem 0.8rem;
+            margin: 0.3rem 0;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .functional-group .example {
+            color: #5d4037;
+            font-style: normal;
+        }
+        
+        /* Rules page styling */
+        .rules-container {
+            display: none;
+        }
+        
+        .rules-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .rules-list li {
+            padding: 1rem;
+            margin: 0.8rem 0;
+            background: linear-gradient(to right, #ffffff, #f8f9fa);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .rules-list li:hover {
+            transform: translateX(10px);
+        }
+        
+        .rules-list li::before {
+            content: "🎯";
+            margin-right: 1rem;
+            font-size: 1.5em;
+        }
+        
+        /* Game page styling */
+        #gameInterface {
+            display: none;
+            position: relative;
+        }
+        
+        /* Game Over page styling */
+        #gameOverPage {
+            display: none;
+        }
+        
+        .celebration-container {
+            text-align: center;
+            padding: 3rem;
+            background: linear-gradient(135deg, #3498db, #8e44ad);
+            border-radius: 15px;
+            color: white;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .celebration-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://i.imgur.com/4gO0dGx.png') repeat;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: #f1c40f;
+            animation: confetti-fall 5s linear infinite;
+        }
+        
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(600px) rotate(720deg); opacity: 0; }
+        }
+        
+        .learning-ideas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .idea-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.8rem;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #2ecc71;
+        }
+        
+        .idea-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.15);
+        }
+        
+        .idea-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .idea-icon {
+            font-size: 2.2rem;
+            color: #e74c3c;
+            margin-bottom: 1.2rem;
+            text-align: center;
+        }
+        
+        .motivation-quote {
+            font-style: italic;
+            text-align: center;
+            padding: 1.8rem;
+            margin: 1.8rem 0;
+            background: linear-gradient(to right, #e8f4f8, #d1e7f5);
+            border-radius: 10px;
+            border-left: 4px solid #3498db;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        
+        .score-display {
+            font-size: 2.2rem;
+            font-weight: bold;
+            background: linear-gradient(145deg, #2ecc71, #27ae60);
+            color: white;
+            padding: 0.8rem 2.5rem;
+            border-radius: 50px;
+            display: inline-block;
+            margin: 1.2rem 0;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+        
+        /* Buttons */
+        .nav-button {
+            display: block;
+            margin: 2rem auto 0;
+            padding: 1rem 3rem;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .nav-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+        }
+        
+        #toRulesButton {
+            background: linear-gradient(145deg, #3498db, #1d6fa5);
+            color: white;
+        }
+        
+        #startButton {
+            background: linear-gradient(145deg, #2ecc71, #27ae60);
+            color: white;
+        }
+        
+        .action-button {
+            margin: 0.8rem;
+            min-width: 220px;
+            padding: 0.8rem 1.5rem;
+        }
+        
+        /* Game board styling */
+        .board {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 6px;
+            max-width: 800px;
+            margin: 30px auto;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            position: relative;
+        }
+        
+        .cell {
+            border: 3px solid #dee2e6;
+            padding: 18px;
+            text-align: center;
+            font-weight: 700;
+            min-height: 70px;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2em;
+            background: linear-gradient(145deg, #ffffff, #f8f9fa);
+            aspect-ratio: 1;
+            cursor: pointer;
+            border-radius: 10px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+        }
+        
+        .cell:hover {
+            transform: scale(1.06);
+            z-index: 2;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+        
+        .player {
+            background-color: rgba(144, 238, 144, 0.8) !important;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .ladder {
+            background: linear-gradient(145deg, #e8f5e9, #dcedc8);
+            color: #2e7d32;
+            border-color: #81c784;
+        }
+        
+        .snake {
+            background: linear-gradient(145deg, #ffebee, #ffcdd2);
+            color: #c62828;
+            border-color: #ef9a9a;
+        }
+        
+        .sticker {
+            font-size: 1.8em;
+            position: absolute;
+            opacity: 0.9;
+            filter: drop-shadow(0 3px 3px rgba(0,0,0,0.2));
+            z-index: 5;
+        }
+        
+        /* Dice styling */
+        .dice-container {
+            perspective: 1000px;
+            margin: 30px auto;
+            position: relative;
+        }
+        
+        .dice {
+            width: 110px;
+            height: 110px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            margin: 0 auto;
+        }
+        
+        .dice-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, #ffffff, #f8f9fa);
+            border: 4px solid #2c3e50;
+            border-radius: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.2em;
+            font-weight: 800;
+            color: #2c3e50;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+        
+        .front  { transform: translateZ(55px); }
+        .back   { transform: rotateX(-180deg) translateZ(55px); }
+        .right  { transform: rotateY(90deg) translateZ(55px); }
+        .left   { transform: rotateY(-90deg) translateZ(55px); }
+        .top    { transform: rotateX(90deg) translateZ(55px); }
+        .bottom { transform: rotateX(-90deg) translateZ(55px); }
+        
+        @keyframes dice-shake {
+            0% { transform: rotate(0) translateY(0); }
+            25% { transform: rotate(15deg) translateY(-8px); }
+            50% { transform: rotate(-15deg) translateY(8px); }
+            75% { transform: rotate(10deg) translateY(-5px); }
+            100% { transform: rotate(0) translateY(0); }
+        }
+        
+        .rolling {
+            animation: dice-shake 0.6s ease-in-out infinite;
+        }
+        
+        /* Player marker styling */
+        .player-marker {
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            background: linear-gradient(145deg, #e74c3c, #c0392b);
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            z-index: 20;
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transform: translate(-50%, -50%); /* Perbaikan posisi */
+        }
+        
+        /* Win message styling */
+        .win-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(145deg, #2ecc71, #27ae60);
+            color: white;
+            padding: 3rem 4rem;
+            border-radius: 20px;
+            font-size: 2.5rem;
+            font-weight: bold;
+            z-index: 1000;
+            box-shadow: 0 0 40px rgba(0,0,0,0.5);
+            animation: popIn 0.8s ease;
+            display: none;
+            text-align: center;
+            border: 4px solid white;
+        }
+        
+        @keyframes popIn {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+        
+        .win-message-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .win-message i {
+            font-size: 4rem;
+            animation: bounce 1s infinite alternate;
+        }
+        
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-20px); }
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .content-container {
+                padding: 1.5rem;
+                margin: 1rem auto;
+            }
+            
+            .concept-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cell {
+                padding: 12px;
+                font-size: 1em;
+                min-height: 55px;
+            }
+            
+            .dice {
+                width: 85px;
+                height: 85px;
+            }
+            
+            .dice-face {
+                font-size: 1.8em;
+            }
+            
+            .nav-button {
+                padding: 0.8rem 2.2rem;
+                font-size: 1em;
+            }
+            
+            .learning-ideas {
+                grid-template-columns: 1fr;
+            }
+            
+            .win-message {
+                font-size: 1.8rem;
+                padding: 2rem 2.5rem;
+            }
+        }
+        
+        /* Custom styling for functional groups */
+        .functional-group-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1.8rem;
+        }
+        
+        .group-title {
+            text-align: center;
+            margin: 2rem 0 1.2rem;
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 0.6rem;
+            font-size: 1.8rem;
+        }
+        
+        /* Header styling */
+        .game-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #3498db, #8e44ad);
+            padding: 1.2rem;
+            border-radius: 12px;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .game-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .game-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        /* Status display */
+        .status-display {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .status-item {
+            background: linear-gradient(145deg, #3498db, #1d6fa5);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            min-width: 150px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        .status-value {
+            font-size: 1.8rem;
+            display: block;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body class="container">
+    <!-- Halaman Konsep Dasar -->
+    <div id="conceptPage" class="content-container">
+        <h1><i class="fas fa-atom"></i> Konsep Dasar Hidrokarbon</h1>
+        
+        <div class="text-center mb-4">
+            <p class="lead">Hidrokarbon adalah senyawa organik yang terdiri dari atom karbon (C) dan hidrogen (H). Senyawa ini merupakan komponen utama minyak bumi dan gas alam.</p>
+        </div>
+        
+        <div class="concept-grid">
+            <div class="concept-card">
+                <div class="concept-icon">
+                    <i class="fas fa-link"></i>
+                </div>
+                <h3><i class="fas fa-1"></i> Alkana</h3>
+                <p>Hidrokarbon jenuh dengan ikatan tunggal. Merupakan rantai karbon paling sederhana.</p>
+                <div class="formula">Rumus Umum: C<sub>n</sub>H<sub>2n+2</sub></div>
+                <div class="example">Contoh: Metana (CH<sub>4</sub>), Etana (C<sub>2</sub>H<sub>6</sub>)</div>
+            </div>
+            
+            <div class="concept-card">
+                <div class="concept-icon">
+                    <i class="fas fa-equals"></i>
+                </div>
+                <h3><i class="fas fa-2"></i> Alkena</h3>
+                <p>Hidrokarbon tak jenuh dengan ikatan rangkap dua. Lebih reaktif dibanding alkana.</p>
+                <div class="formula">Rumus Umum: C<sub>n</sub>H<sub>2n</sub></div>
+                <div class="example">Contoh: Etena (C<sub>2</sub>H<sub>4</sub>), Propena (C<sub>3</sub>H<sub>6</sub>)</div>
+            </div>
+            
+            <div class="concept-card">
+                <div class="concept-icon">
+                    <i class="fas fa-infinity"></i>
+                </div>
+                <h3><i class="fas fa-3"></i> Alkuna</h3>
+                <p>Hidrokarbon tak jenuh dengan ikatan rangkap tiga. Memiliki reaktivitas tinggi.</p>
+                <div class="formula">Rumus Umum: C<sub>n</sub>H<sub>2n-2</sub></div>
+                <div class="example">Contoh: Etuna (C<sub>2</sub>H<sub>2</sub>), Propuna (C<sub>3</sub>H<sub>4</sub>)</div>
+            </div>
+            
+            <div class="concept-card">
+                <div class="concept-icon">
+                    <i class="fas fa-ring"></i>
+                </div>
+                <h3><i class="fas fa-copyright"></i> Aromatik</h3>
+                <p>Hidrokarbon dengan struktur cincin benzena. Memiliki ikatan terdelokalisasi.</p>
+                <div class="formula">Rumus Umum: C<sub>6</sub>H<sub>6</sub> (benzena)</div>
+                <div class="example">Contoh: Benzena, Toluena, Naftalena</div>
+            </div>
+        </div>
+        
+        <!-- Bagian Gugus Fungsi -->
+        <h2 class="group-title"><i class="fas fa-flask"></i> Gugus Fungsi dalam Kimia Organik</h2>
+        
+        <div class="mb-4">
+            <p>Gugus fungsi adalah atom atau kelompok atom yang menentukan sifat kimia suatu senyawa organik. Dengan mengidentifikasi gugus fungsi, kita dapat memprediksi reaktivitas dan sifat senyawa tersebut.</p>
+        </div>
+        
+        <div class="functional-group-grid">
+            <div class="functional-group">
+                <div class="name">1. Alkohol</div>
+                <div class="formula">-OH</div>
+                <p>Senyawa dengan gugus hidroksil (-OH) yang terikat pada atom karbon jenuh.</p>
+                <div class="example">Contoh: Etanol (C<sub>2</sub>H<sub>5</sub>OH)</div>
+            </div>
+            
+            <div class="functional-group">
+                <div class="name">2. Aldehid</div>
+                <div class="formula">-CHO</div>
+                <p>Senyawa dengan gugus karbonil (C=O) di ujung rantai karbon.</p>
+                <div class="example">Contoh: Formaldehida (HCHO)</div>
+            </div>
+            
+            <div class="functional-group">
+                <div class="name">3. Keton</div>
+                <div class="formula">-CO-</div>
+                <p>Senyawa dengan gugus karbonil (C=O) di tengah rantai karbon.</p>
+                <div class="example">Contoh: Aseton (CH<sub>3</sub>COCH<sub>3</sub>)</div>
+            </div>
+            
+            <div class="functional-group">
+                <div class="name">4. Asam Karboksilat</div>
+                <div class="formula">-COOH</div>
+                <p>Senyawa dengan gugus karboksil yang bersifat asam.</p>
+                <div class="example">Contoh: Asam asetat (CH<sub>3</sub>COOH)</div>
+            </div>
+            
+            <div class="functional-group">
+                <div class="name">5. Ester</div>
+                <div class="formula">-COO-</div>
+                <p>Senyawa yang dihasilkan dari reaksi asam karboksilat dan alkohol.</p>
+                <div class="example">Contoh: Etil asetat (CH<sub>3</sub>COOC<sub>2</sub>H<sub>5</sub>)</div>
+            </div>
+            
+            <div class="functional-group">
+                <div class="name">6. Eter</div>
+                <div class="formula">-O-</div>
+                <p>Senyawa dengan atom oksigen yang mengikat dua gugus alkil.</p>
+                <div class="example">Contoh: Dietil eter (C<sub>2</sub>H<sub>5</sub>OC<sub>2</sub>H<sub>5</sub>)</div>
+            </div>
+        </div>
+        
+        <div class="mt-4">
+            <h3><i class="fas fa-lightbulb"></i> Fakta Menarik:</h3>
+            <ul class="rules-list">
+                <li>Metana (CH<sub>4</sub>) adalah hidrokarbon paling sederhana dan komponen utama gas alam</li>
+                <li>Plastik, karet sintetis, dan seraf sintetis berasal dari hidrokarbon</li>
+                <li>Reaksi pembakaran hidrokarbon menghasilkan CO<sub>2</sub> dan H<sub>2</sub>O</li>
+                <li>Rantai karbon terpanjang yang diketahui memiliki 100 atom karbon!</li>
+                <li>Gugus fungsi -COOH pada cuka (asam asetat) membuatnya bersifat asam</li>
+                <li>Alkohol dengan rantai pendek seperti metanol dan etanol mudah larut dalam air</li>
+            </ul>
+        </div>
+        
+        <button id="toRulesButton" class="btn nav-button">
+            <i class="fas fa-arrow-right"></i> Lanjut ke Peraturan
+        </button>
+    </div>
+
+    <!-- Tampilan Peraturan -->
+    <div class="rules-container content-container">
+        <div class="game-header">
+            <div class="game-title">🚀Hydrocarbon Rocket or Snake🐍</div>
+            <div class="game-subtitle">Permainan Edukatif Kimia Hidrokarbon</div>
+        </div>
+        
+        <h2 class="text-center mb-4">📜 Rules 📖</h2>
+        <ul class="rules-list">
+            <li>Klik tombol 🎲 untuk melempar dadu</li>
+            <li>Jawab pertanyaan kimia hidrokarbon dengan benar</li>
+            <li>Dapatkan +10 poin untuk setiap jawaban benar</li>
+            <li>Hindari ular 🐍 yang akan mengurangi 2 poin</li>
+            <li>Naiki roket 🚀 untuk melompat lebih cepat</li>
+            <li>Capai 100 poin untuk berhasil dan lanjut ke halaman berikutnya</li>
+            <li>Jangan lupa berdoa agar tidak tergigit ular😆</li>
+        </ul>
+        <button id="startButton" class="btn nav-button">🎮 Mulai Bermain!</button>
+    </div>
+
+    <!-- Tampilan Game -->
+    <div id="gameInterface" class="content-container">
+        <div class="game-header">
+            <div class="game-title">🐍🚀Hydrocarbon Rocket or Snake🚀🐍</div>
+            <div class="game-subtitle">📚Educative Game by Salsa🧪</div>
+        </div>
+
+        <div class="dice-container text-center">
+            <div id="dice" class="dice">
+                <div class="dice-face front">1</div>
+                <div class="dice-face back">2</div>
+                <div class="dice-face right">3</div>
+                <div class="dice-face left">4</div>
+                <div class="dice-face top">5</div>
+                <div class="dice-face bottom">6</div>
+            </div>
+        </div>
+
+        <div class="status-display">
+            <div class="status-item">
+                Posisi
+                <span id="position" class="status-value">0</span>
+            </div>
+            <div class="status-item">
+                Skor
+                <span id="score" class="status-value">0</span>/100
+            </div>
+        </div>
+
+        <div id="board" class="board" style="position: relative;">
+            <!-- Board akan diisi oleh JavaScript -->
+            <!-- Pion ditempatkan di sini -->
+            <div id="playerMarker" class="player-marker" style="display: none;"></div>
+        </div>
+        
+        <div class="text-center mt-4">
+            <button id="rollDice" class="btn btn-danger btn-lg">
+                <i class="fas fa-dice"></i> Lempar Dadu
+            </button>
+        </div>
+        
+        <!-- Pesan kemenangan -->
+        <div id="winMessage" class="win-message">
+            <div class="win-message-content">
+                <i class="fas fa-trophy"></i>
+                <div>yayy kamu berhasil!</div>
+                <div>Skor: <span id="winScore">0</span>/100</div>
+            </div>
+        </div>
+
+        <!-- Modal Pertanyaan -->
+        <div class="modal fade" id="questionModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="questionText"></h5>
+                    </div>
+                    <div class="modal-body">
+                        <p id="clueText"></p>
+                        <input type="text" class="form-control mt-3" id="answerInput" placeholder="Masukkan jawaban...">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" onclick="checkAnswer()">Submit Jawaban</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tampilan Game Over -->
+    <div id="gameOverPage" class="content-container">
+        <div class="celebration-container">
+            <h1>Selamat! 🎉</h1>
+            <h3>Kamu telah menyelesaikan permainan!</h3>
+            <div class="score-display">
+                Skor Akhir: <span id="finalScore">0</span>
+            </div>
+            <p>Prestasi luar biasa dalam menjelajahi dunia hidrokarbon!</p>
+        </div>
+        
+        <div class="motivation-quote">
+            <i class="fas fa-quote-left"></i> Kimia adalah puisi logika. Hidrokarbon adalah bait pertamanya yang indah.
+            <i class="fas fa-quote-right"></i>
+        </div>
+        
+        <h2 class="text-center mb-4">💡 Ide Belajar Kreatif Kimia Hidrokarbon</h2>
+        
+        <div class="learning-ideas">
+            <div class="idea-card">
+                <div class="idea-icon">
+                    <i class="fas fa-vial"></i>
+                </div>
+                <h4>Eksperimen Sederhana</h4>
+                <p>Coba buat model molekul hidrokarbon dengan clay atau stik es krim. Visualisasi 3D membantu memahami struktur molekul.</p>
+            </div>
+            
+            <div class="idea-card">
+                <div class="idea-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h4>Mind Mapping</h4>
+                <p>Buat peta konsep besar yang menghubungkan berbagai jenis hidrokarbon dengan sifat dan aplikasinya dalam kehidupan sehari-hari.</p>
+            </div>
+            
+            <div class="idea-card">
+                <div class="idea-icon">
+                    <i class="fas fa-gamepad"></i>
+                </div>
+                <h4>Permainan Kartu</h4>
+                <p>Buat kartu dengan rumus kimia di satu sisi dan nama senyawa di sisi lain. Gunakan untuk bermain tebak-tebakan dengan teman.</p>
+            </div>
+            
+            <div class="idea-card">
+                <div class="idea-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h4>Penelitian Sehari-hari</h4>
+                <p>Cari tahu hidrokarbon apa saja yang ada di sekitar rumahmu (bensin, plastik, minyak goreng) dan identifikasi jenisnya.</p>
+            </div>
+        </div>
+        
+        <div class="text-center mt-4">
+            <button id="playAgainButton" class="btn btn-success action-button">
+                <i class="fas fa-redo"></i> Main Lagi
+            </button>
+            <button id="backToConceptButton" class="btn btn-primary action-button">
+                <i class="fas fa-book"></i> Kembali ke Materi
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let position = 0;
+        let score = 0;
+        let playerMarker = document.getElementById('playerMarker');
+        let usedQuestions = new Set(); // Untuk melacak pertanyaan yang sudah digunakan
+        let currentQuestion = null; // Pertanyaan saat ini
+        let questionQueue = []; // Antrian pertanyaan
+
+        // Navigasi halaman
+        document.getElementById('toRulesButton').addEventListener('click', () => {
+            document.getElementById('conceptPage').style.display = 'none';
+            document.querySelector('.rules-container').style.display = 'block';
+        });
+
+        // Inisialisasi Game
+        document.getElementById('startButton').addEventListener('click', () => {
+            document.querySelector('.rules-container').style.display = 'none';
+            document.getElementById('gameInterface').style.display = 'block';
+            initBoard();
+        });
+
+        // Fungsi Dadu
+        function rollDice() {
+            const dice = document.getElementById('dice');
+            const btn = document.getElementById('rollDice');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengocok...';
+            
+            const randomRotation = {
+                x: Math.floor(Math.random() * 10 + 15) * 90,
+                y: Math.floor(Math.random() * 10 + 15) * 90,
+                z: Math.floor(Math.random() * 10 + 15) * 90
+            };
+
+            dice.style.transform = `rotateX(${randomRotation.x}deg) rotateY(${randomRotation.y}deg) rotateZ(${randomRotation.z}deg)`;
+            dice.classList.add('rolling');
+
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    dice.classList.remove('rolling');
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-dice"></i> Lempar Dadu';
+                    resolve(Math.floor(Math.random() * 6) + 1);
+                }, 1800);
+            });
+        }
+
+        // Fungsi pembuat warna pastel
+        function getPastelColor() {
+            const hue = Math.floor(Math.random() * 360);
+            const saturation = Math.floor(Math.random() * 20 + 70);
+            const lightness = Math.floor(Math.random() * 10 + 80);
+            return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+        }
+
+        // Inisialisasi Papan
+        function initBoard() {
+            const board = document.getElementById('board');
+            board.innerHTML = '';
+            playerMarker.style.display = 'block';
+            
+            // Tambahkan pion sebagai anak dari board
+            board.appendChild(playerMarker);
+            
+            for(let i = 100; i > 0; i--) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.id = `cell${i}`;
+                cell.innerHTML = i;
+                cell.style.backgroundColor = getPastelColor();
+
+                if(i in paths) {
+                    const isLadder = paths[i] > i;
+                    const sticker = document.createElement('div');
+                    sticker.className = 'sticker';
+                    sticker.innerHTML = isLadder ? '🚀⬆' : '🐍⬇';
+                    sticker.style.top = isLadder ? '5px' : '25px';
+                    cell.appendChild(sticker);
+                    cell.classList.add(isLadder ? 'ladder' : 'snake');
+                }
+
+                board.appendChild(cell);
+            }
+            
+            // Tampilkan pion di posisi awal
+            updatePosition(0);
+        }
+
+        // Fungsi untuk membuat confetti
+        function createConfetti() {
+            const container = document.querySelector('.celebration-container');
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                confetti.style.animationDelay = Math.random() * 5 + 's';
+                confetti.style.width = Math.random() * 10 + 8 + 'px';
+                confetti.style.height = confetti.style.width;
+                container.appendChild(confetti);
+            }
+        }
+
+        // Fungsi Update Posisi (diperbaiki)
+        function updatePosition(newPos) {
+            document.getElementById(`cell${position}`)?.classList.remove('player');
+            position = newPos;
+            document.getElementById('position').textContent = position;
+            
+            // Perbarui posisi pion dengan cara yang benar
+            const currentCell = document.getElementById(`cell${position}`);
+            if (currentCell) {
+                const rect = currentCell.getBoundingClientRect();
+                const boardRect = document.getElementById('board').getBoundingClientRect();
+                
+                // Hitung posisi relatif terhadap board
+                const top = rect.top - boardRect.top + (rect.height / 2);
+                const left = rect.left - boardRect.left + (rect.width / 2);
+                
+                playerMarker.style.top = `${top}px`;
+                playerMarker.style.left = `${left}px`;
+                currentCell.classList.add('player');
+            }
+            
+            if(position in paths) {
+                const target = paths[position];
+                setTimeout(() => {
+                    if(paths[position] > position) {
+                        alert(`🚀 Naik tangga ke ${target}!`);
+                    } else {
+                        alert(`🐍 Kena ular! Turun ke ${target} dan -2 poin`);
+                        score = Math.max(0, score - 2);
+                        document.getElementById('score').textContent = score;
+                    }
+                    updatePosition(target);
+                }, 800);
+            }
+        }
+
+        // Fungsi untuk menampilkan pesan kemenangan
+        function showWinMessage() {
+            const winMessage = document.getElementById('winMessage');
+            document.getElementById('winScore').textContent = score;
+            winMessage.style.display = 'block';
+            
+            setTimeout(() => {
+                winMessage.style.display = 'none';
+                showGameOverPage();
+            }, 3000);
+        }
+
+        // Fungsi untuk menampilkan halaman akhir
+        function showGameOverPage() {
+            document.getElementById('gameInterface').style.display = 'none';
+            document.getElementById('gameOverPage').style.display = 'block';
+            document.getElementById('finalScore').textContent = score;
+            createConfetti();
+        }
+
+        // Fungsi Pertanyaan (diperbaiki)
+        function showQuestion() {
+            // Jika antrian kosong, isi ulang
+            if (questionQueue.length === 0) {
+                // Buat salinan pertanyaan yang belum digunakan
+                const availableQuestions = allQuestions.filter(q => !usedQuestions.has(q.question));
+                
+                // Jika semua pertanyaan sudah digunakan, reset
+                if (availableQuestions.length === 0) {
+                    usedQuestions.clear();
+                    questionQueue = [...allQuestions];
+                } else {
+                    questionQueue = [...availableQuestions];
+                }
+                
+                // Acak urutan pertanyaan
+                shuffleArray(questionQueue);
+            }
+            
+            // Ambil pertanyaan berikutnya dari antrian
+            currentQuestion = questionQueue.pop();
+            usedQuestions.add(currentQuestion.question);
+            
+            document.getElementById('questionText').textContent = currentQuestion.question;
+            document.getElementById('clueText').textContent = `Clue: ${currentQuestion.clue}`;
+            new bootstrap.Modal(document.getElementById('questionModal')).show();
+        }
+
+        // Fungsi untuk mengacak array
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function checkAnswer() {
+            if (!currentQuestion) return;
+            
+            const userAnswer = document.getElementById('answerInput').value.toLowerCase().trim();
+            
+            if(currentQuestion.answer.includes(userAnswer)) {
+                score += 10;
+                document.getElementById('score').textContent = score;
+                alert('🎉 Benar! +10 poin');
+                
+                // Periksa jika skor mencapai 100
+                if(score >= 100) {
+                    setTimeout(() => {
+                        showWinMessage();
+                    }, 1000);
+                }
+            } else {
+                alert(`😢 Salah! Jawaban: ${currentQuestion.answer}`);
+            }
+
+            document.getElementById('answerInput').value = '';
+            bootstrap.Modal.getInstance(document.getElementById('questionModal')).hide();
+        }
+
+        // Event Listener Dadu
+        document.getElementById('rollDice').addEventListener('click', async () => {
+            const btn = document.getElementById('rollDice');
+            btn.disabled = true;
+            
+            try {
+                const result = await rollDice();
+                const newPos = position + result;
+                
+                // Jika melebihi 100, tetap di posisi saat ini
+                if (newPos > 100) {
+                    alert(`Melebihi 100! Tetap di posisi ${position}`);
+                    btn.disabled = false;
+                    return;
+                }
+                
+                updatePosition(newPos);
+                if(newPos <= 100) showQuestion();
+                
+                // Periksa jika skor mencapai 100
+                if(score >= 100) {
+                    setTimeout(() => {
+                        showWinMessage();
+                    }, 1000);
+                }
+            } finally {
+                btn.disabled = false;
+            }
+        });
+
+        // Tombol untuk bermain lagi
+        document.getElementById('playAgainButton').addEventListener('click', () => {
+            position = 0;
+            score = 0;
+            usedQuestions.clear();
+            questionQueue = [];
+            document.getElementById('position').textContent = position;
+            document.getElementById('score').textContent = score;
+            document.getElementById('gameOverPage').style.display = 'none';
+            document.getElementById('gameInterface').style.display = 'block';
+            initBoard();
+        });
+
+        // Tombol untuk kembali ke materi
+        document.getElementById('backToConceptButton').addEventListener('click', () => {
+            position = 0;
+            score = 0;
+            usedQuestions.clear();
+            questionQueue = [];
+            document.getElementById('position').textContent = position;
+            document.getElementById('score').textContent = score;
+            document.getElementById('gameOverPage').style.display = 'none';
+            document.getElementById('conceptPage').style.display = 'block';
+        });
+
+        // Data Pertanyaan (diperbaiki dan ditambah)
+        const allQuestions = [
+            { question: "Apa rumus kimia metana?", answer: "ch4", clue: "Senyawa alkana paling sederhana" },
+            { question: "Apa rumus umum alkena?", answer: "cnh2n", clue: "Dua atom H lebih sedikit dari alkana" },
+            { question: "Apa jenis ikatan pada alkuna?", answer: "rangkap tiga", clue: "Lebih kuat dari rangkap dua" },
+            { question: "Apakah etanol termasuk hidrokarbon jenuh?", answer: "tidak", clue: "Mengandung gugus -OH" },
+            { question: "Apa gugus fungsi asam karboksilat?", answer: "cooh", clue: "Terdiri dari gugus karbonil dan hidroksil" },
+            { question: "Ester terbentuk dari reaksi antara...?", answer: "asam karboksilat dan alkohol", clue: "Campuran dua senyawa organik" },
+            { question: "Propana jenuh atau tak jenuh?", answer: "jenuh", clue: "Termasuk alkana" },
+            { question: "Apa ciri khas senyawa aromatik?", answer: "cincin benzena", clue: "Struktur melingkar dengan elektron delokalisasi" },
+            { question: "Toluen merupakan turunan dari...?", answer: "benzena", clue: "Memiliki gugus metil" },
+            { question: "Contoh hidrokarbon aromatik selain benzena?", answer: "naftalena", clue: "Digunakan pada kapur barus" },
+            { question: "Contoh senyawa alkuna?", answer: "etuna", clue: "2 atom C dan ikatan rangkap tiga" },
+            { question: "Apa rumus umum alkana?", answer: "cnh2n+2", clue: "Jumlah H paling banyak" },
+            { question: "Hidrokarbon terbagi menjadi berapa kelompok utama?", answer: "2", clue: "Jenuh dan tak jenuh" },
+            { question: "Toluena mengandung gugus?", answer: "metil", clue: "CH3 pada cincin" },
+            { question: "Apa rumus umum alkuna?", answer: "cnh2n-2", clue: "Lebih sedikit H karena ikatan rangkap tiga" },
+            { question: "Etena sebagai bahan baku", answer: "plastik", clue: "Polimer penting" },
+            { question: "Apa peran gugus -OH pada alkohol? Menentukan sifat....", answer: "polar", clue: "Membuat senyawa larut air" },
+            { question: "Hidrokarbon jenuh termasuk golongan?", answer: "alkana", clue: "Ikatan tunggal semua" },
+            { question: "Berapa jumlah atom H dalam etana?", answer: "6", clue: "Alkana 2 atom C" },
+            { question: "Etuna termasuk golongan apa?", answer: "alkuna", clue: "Ikatan rangkap tiga" },
+            { question: "Ciri utama alkena?", answer: "ikatan rangkap dua", clue: "Lebih reaktif dari alkana" },
+            { question: "Apa kegunaan etanol?", answer: "pelarut", clue: "dapat melarutkan zat" },
+            { question: "Benzena termasuk senyawa?", answer: "aromatik", clue: "Memiliki cincin terdelokalisasi" },
+            { question: "Jumlah atom C pada propana?", answer: "3", clue: "Awalan 'prop'" },
+            { question: "Gugus fungsi pada aldehid?", answer: "cho", clue: "Hanya satu O" },
+            { question: "Benzil alkohol adalah?", answer: "alkohol aromatik", clue: "Memiliki gugus -OH dan cincin" },
+            { question: "Apakah etana dan etena isomer?", answer: "tidak", clue: "Jenis ikatannya beda" },
+            { question: "Etuna punya ikatan apa?", answer: "rangkap tiga", clue: "Alkuna paling sederhana" },
+            { question: "Apakah sikloheksana termasuk aromatik?", answer: "tidak", clue: "Tidak ada ikatan rangkap delokalisasi" },
+            { question: "Ciri senyawa tak jenuh?", answer: "ikatan rangkap", clue: "Bisa ganda atau tiga" },
+            { question: "Gugus fungsi pada keton?", answer: "co", clue: "Di tengah rantai karbon" },
+            { question: "Apakah CH≡CH merupakan alkuna?", answer: "ya", clue: "Rumus etuna" },
+            { question: "Apa nama senyawa CH₃CH₂OH?", answer: "etanol", clue: "Alkohol rantai pendek" },
+            { question: "Berapa jumlah atom H dalam propana?", answer: "8", clue: "Rumus alkana CnH2n+2" },
+            { question: "Senyawa dengan rumus C₆H₆ disebut?", answer: "benzena", clue: "Senyawa aromatik dasar" }
+        ];
+
+        // Acak pertanyaan di awal
+        shuffleArray(allQuestions);
+        questionQueue = [...allQuestions];
+
+        // Peta tangga dan ular (diperbaiki)
+        const paths = {
+            3: 22, 8: 34, 28: 44, 35: 49, 41: 59,
+            46: 66, 70: 88, 81: 95,
+            17: 7, 30: 10, 33: 12, 39: 15, 55: 23, 63: 35,
+            84: 42, 91: 48, 96: 50, 99: 52
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
